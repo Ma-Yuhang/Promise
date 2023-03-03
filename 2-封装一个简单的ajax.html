@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // https://api.uixsj.cn/hitokoto/get?type=hitokoto&code=json
+        function sendAjax(url, data) {
+            return new Promise((resolve, reject) => {
+                const xhr = new XMLHttpRequest();
+                xhr.onreadystatechange = () => {
+                    if (xhr.readyState === 4) {
+                        if (xhr.status >= 200 && xhr.status < 300) {
+                            resolve(xhr.response)
+                        } else {
+                            reject('失败了!')
+                        }
+                    }
+                }
+                let str = '';
+                for (const key in data) {
+                    str += `${key}=${data[key]}&`
+                }
+                str = str.slice(0, -1)
+                xhr.open('GET', url + '?' + str)
+                xhr.responseType = 'json'
+                xhr.send()
+            })
+        }
+        sendAjax('https://api.uixsj.cn/hitokoto/get', { type: 'hitokoto', code: 'json' }).then(
+            value => {
+                console.log('成功了', value);
+            },
+            reason => {
+                console.log('失败了原因是', reason);
+            }
+        )
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        const p = new Promise((resolve, reject) => {
+            setTimeout(() => {
+                resolve(1)
+            }, 2000);
+        });
+        async function demo() {
+            // 程序员‘轻松’方式的代码
+            const result = await p
+            console.log(result);
+            console.log(100);
+            console.log(200);
+            // 浏览器翻译后的代码
+            // p.then(
+            //     result => {
+            //         console.log(result);
+            //         console.log(100);
+            //         console.log(200);
+            //     }
+            // )
+        }
+        demo();
+        console.log(2222);
+    </script>
+</body>
+
+</html>

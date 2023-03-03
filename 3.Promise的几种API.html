@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        /* 
+            1. Promise构造函数:new Promise (executor) {}
+                executor函数:是同步执行的:(resolve, reject) =>{
+                resolve函数:调用resolve将Promise实例内部状态改为成功(fulfilled)。
+                reject函数:调用reject将Promise实例内部状态改为失败(rejected)。
+                说明: excutor函数会在Promise内部立即同步调用,异步代码放在excutor函数中。
+
+            2.Promise.prototype.then方法:Promise实例.then(onFulfilled,onRejected)
+                onFulfilled:成功的回调函数(value) =>{得
+                onRejected:失败的回调函数(reason) =>{
+                特别注意(难点):then方法会返回一个新的Promise实例对象
+
+            3.Promise.prototype.catch方法:Promise实例.catch(onRejected)
+                onRejected:失败的回调函数(reason) =>{}
+                说明: catch方法是then方法的语法糖，相当于: then(undefined，onRejected)
+
+            4.Promise.resolve方法:Promise.resolve(value)
+                说明:用于快速返回一个状态为fulfilled或rejected的Promise实例对象
+                备注: value的值可能是:
+                    (1)非Promise值 (2)Promise值 
+
+            5.Promise.reject方法:Promise.reject方法(reason)
+                说明:用于快速返回一个状态为rejected的Promise实例对象
+
+            6.Promise.all方法:Promise.all(promiseArr)
+                promiseArr:包含n个Promise实例的数组
+                说明:返回一个新的Promise实例，只有所有的promise都成功才成功，只要有一个失败了就直接失败
+                
+            7.Promise.race方法: Promise.race(promiseArr)
+                promiseArr:包含n个Promise实例的数组
+                说明:返回一个新的Promise实例，成功还是很失败?以最先出结果的promise为准。
+            8.Promise.allSettled方法: Promise.allSettled(promiseArr)
+                promiseArr:包含n个Promise实例的数组
+                说明:返回一个新的总是成功的Promise实例，不管n个promise是成功还是失败。
+                    [
+                        {status: 'fulfilled', value: 1}
+                        {status: 'rejected', reason: 2}
+                        {status: 'fulfilled', value: 3}
+                    ]  
+            9.Promise.any方法: Promise.any(promiseArr)
+                promiseArr:包含n个Promise实例的数组
+                说明:返回第一个成功的Promise实例,若全部失败则失败
+
+            注意：all allSettled的区别：
+                    all: 当所有实例成功是才成功,只要有一个失败就返回失败
+                    allSettled: 总是成功的，收到一个数组
+                 race any的区别：
+                    race: 成功还是失败，取决于最先成功还是失败的那个
+                    any: 返回第一个成功的那个promise的那个值(前边可以有失败)
+        */
+
+        // 1.Promise.prototype.then() 
+        /* const p = new Promise((resolve, reject) => {
+            setTimeout(() => {
+                resolve(100)
+            }, 2000)
+        })
+        const x = p.then(
+            value => { console.log('成功了', value); },
+            reason => { console.log('失败了', reason); }
+        )
+        console.log(x); */
+
+        // 2.Promise.prototype.catch() 只考虑失败的回调的语法糖
+        // const p = new Promise((resolve, reject) => {
+        //     setTimeout(() => {
+        //         reject(-100)
+        //     }, 2000)
+        // })
+        // // 只考虑失败情况时 两种写法
+        // // 第1种写法
+        // // p.then(
+        // //     undefined,
+        // //     reason => { console.log('失败了', reason); }
+        // // )
+        // // 第2种写法
+        // p.catch(
+        //     reason => { console.log('失败了', reason); }
+        // )
+
+        // 3.Promise.resolve() 
+        // const p0 = Promise.resolve(2)
+        // const p = Promise.resolve(p0)  // 成功
+        /* const p0 = Promise.reject(2)
+        const p = Promise.resolve(p0)  // 失败
+        p.then(
+            value => { console.log('成功了', value); },
+            reason => { console.log('失败了', reason); }
+        ) */
+
+        // 4.Promise.reject() 快速生成一个失败的Promise实例
+        // const p0 = Promise.reject(2)
+        // const p = Promise.reject(p0)  // 失败
+        /* const p0 = Promise.resolve(2)
+        const p = Promise.reject(p0)  // 失败
+        p.then(
+            value => { console.log('成功了', value); },
+            reason => { console.log('失败了', reason); }
+        ) */
+
+        // 5.Promise.all(promiseArr) 全部成功才算成功
+        /* const p1 = new Promise((resolve, reject) => {
+            resolve(1)
+        })
+        const p2 = new Promise((resolve, reject) => {
+            setTimeout(() => {
+                reject(2)
+            }, 500);
+        })
+        const p3 = new Promise((resolve, reject) => {
+            setTimeout(() => {
+                resolve(3)
+            }, 2000);
+        })
+        Promise.all([p1, p2, p3]).then(
+            value => { console.log('成功了', value); },
+            reason => { console.log('失败了', reason); }
+        ) */
+
+        // 6.Promise.race(promiseArr) 按最快的那个
+        const p1 = new Promise((resolve, reject) => {
+            reject(1)
+        })
+        const p2 = new Promise((resolve, reject) => {
+            setTimeout(() => {
+                reject(2)
+            }, 500);
+        })
+        const p3 = new Promise((resolve, reject) => {
+            setTimeout(() => {
+                reject(3)
+            }, 2000);
+        })
+        Promise.any([p1, p2, p3]).then(
+            value => { console.log('成功了', value); },
+            reason => { console.log('失败了', reason); }
+        )
+    </script>
+</body>
+
+</html>
